@@ -21,6 +21,7 @@ import { PermissionMiddleware } from '../shared/middlewares/permission.middlewar
 import { ValidationMiddleware } from '../shared/middlewares/validator.middleware';
 import { AuthMiddleware } from '../shared/middlewares/auth.middleware';
 import { FileUploadMiddleware } from '../shared/middlewares/file.middleware';
+import { youtubeModule } from './youtube_module';
 
 const mainContainer = new Container();
 
@@ -32,6 +33,7 @@ mainContainer.load(authStrategyModule);
 mainContainer.load(roleModule);
 mainContainer.load(imageModule);
 mainContainer.load(mailerModule);
+mainContainer.load(youtubeModule);
 
 mainContainer
   .bind<PermissionMiddleware>('PermissionMiddleware')

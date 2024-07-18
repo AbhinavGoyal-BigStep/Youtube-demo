@@ -159,5 +159,8 @@
       "yarn format",
       "git add --all"
     ]
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/AbhinavGoyal-BigStep/Youtube-demo.git",
+  "author": "<abhinav.goyal@bigsteptech.com>"
 }
