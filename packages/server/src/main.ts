@@ -11,6 +11,7 @@ import * as swagger from 'swagger-express-ts';
 import { CONFIG } from './config';
 import { errorMiddleware } from './shared/middlewares/error.middleware';
 import { SwaggerDefinitionConstant } from 'swagger-express-ts';
+import { Redis } from './shared/utils/redis';
 /** Load Envrionment Variables form .env file */
 config();
 
@@ -48,6 +49,9 @@ server
     );
   });
 
+//initialize redis
+export const redis = new Redis();
+
 const app = server.build();
 
 app
@@ -65,4 +69,14 @@ app
 process.on('beforeExit', function (err) {
   winston.error(JSON.stringify(err));
   console.error(err);
+});
+
+process.on('SIGINT', async () => {
+  await redis.quit();
+  console.log('Received SIGINT signal');
+});
+
+process.on('SIGTERM', async () => {
+  await redis.quit();
+  console.log('Received SIGTERM signal');
 });

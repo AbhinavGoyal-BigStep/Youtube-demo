@@ -22,6 +22,8 @@ import {
 } from '../validators/index.chain';
 import { ApiOperationGet, ApiOperationPost, ApiPath } from 'swagger-express-ts';
 import openAPI from './youtube.openapi';
+import { Redis } from '../../../shared/utils/redis';
+import { redis } from '../../../main';
 
 @ApiPath({
   path: '/youtube',
@@ -33,7 +35,7 @@ export class YoutubeController extends BaseHttpController {
   private youtubeService: YoutubeService;
   private youtubePolicy: YoutubePolicy;
   private logger;
-
+  private redis = redis;
   constructor(
     @inject(TYPES.YoutubeService)
     youtubeService: YoutubeService,
@@ -55,8 +57,16 @@ export class YoutubeController extends BaseHttpController {
   ) {
     try {
       const searchDto: SearchDto = this.youtubePolicy.searchDto(req);
+      const cacheKey = `search:${JSON.stringify(searchDto)}`;
+      const cacheData = await this.redis.getJSON(cacheKey);
+
+      if (cacheData) {
+        return cacheData;
+      }
+
       const searchResult = await this.youtubeService.search(searchDto);
       const result = this.createResponse(searchResult);
+      this.redis.setJSON(cacheKey, result);
       return this.json(result, 200);
     } catch (error) {
       next(error);
