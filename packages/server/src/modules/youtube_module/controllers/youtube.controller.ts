@@ -49,6 +49,16 @@ export class YoutubeController extends BaseHttpController {
     this.logger = loggerFactory.createLogger('YoutubeController');
   }
 
+  /*
+    API to fetch the list of videos from the youtube API
+    @param {req}    type - the type of searches (playlist, video, channel) ,
+                    maxResults - no. of results (0 - 50),
+                    part - the data we get from youtube api(snippet),
+                    q - search keywords (array of string),
+                    pageToken - page token (used for the next page and previous page)
+
+    @returns list of youtube videos matching the search params
+  */
   @httpPost('/search', ValidationMiddleware.validate(youtubeSearchValidation))
   public async searchByPlaylist(
     req: Request,
@@ -72,6 +82,11 @@ export class YoutubeController extends BaseHttpController {
       next(error);
     }
   }
+  /*
+    method used to transform the data received from the youtube API
+    @param {data}
+    @return transformed data
+  */
   createResponse(data) {
     return {
       length: data.items.length,
@@ -94,63 +109,4 @@ export class YoutubeController extends BaseHttpController {
       },
     };
   }
-  // @httpPost('/', ValidationMiddleware.validate(postCreate))
-  // public async create(req: Request, res: Response, next: NextFunction) {
-  //   try {
-  //     const dto = this.youtubePolicy.createDto(req);
-  //     const result = await this.youtubeService.create(dto);
-  //     return this.json(result, 200);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
-  // @httpPatch('/:id', ValidationMiddleware.validate(idParamValidation))
-  // public async update(
-  //   @requestParam('id') id: string,
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   try {
-  //     const dto = this.youtubePolicy.updateDto(req);
-  //     const result = await this.youtubeService.update(id, dto);
-
-  //     return this.json(result, 200);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
-  // @httpGet('/:id', ValidationMiddleware.validate(idParamValidation))
-  // public async getById(
-  //   @requestParam('id') id: string,
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   try {
-  //     const result = await this.youtubeService.findById(id);
-
-  //     return this.json(result, 200);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
-
-  // @httpDelete('/:id', ValidationMiddleware.validate(idParamValidation))
-  // public async delete(
-  //   @requestParam('id') id: string,
-  //   req: Request,
-  //   res: Response,
-  //   next: NextFunction
-  // ) {
-  //   try {
-  //     const result = await this.youtubeService.delete(id);
-
-  //     return res.status(200).json(result);
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // }
 }

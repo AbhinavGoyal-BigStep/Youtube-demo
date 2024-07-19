@@ -13,15 +13,11 @@ export class YoutubePolicy {
     this.youtubeRepository = youtubeRepository;
   }
 
-  // createDto(req: Request): CreateDto {
-  //   const dto = {};
-
-  //   return dto;
-  // }
-
-  // updateDto(req: Request): UpdateDto {
-  //   return this.createDto(req);
-  // }
+  /*
+    method used to transform the req data in the required format
+    @param {req}
+    @return the required format of request
+  */
 
   searchDto(req: Request): SearchDto {
     const body = req.body;
